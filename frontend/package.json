@@ -31,6 +31,7 @@
     "react-scripts": "5.0.1",
     "react-stripe-checkout": "^2.6.3",
     "react-swipeable-views": "^0.14.0",
+    "recharts": "^2.15.2",
     "socket.io-client": "^4.8.1",
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.6.15",

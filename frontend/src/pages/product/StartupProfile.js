@@ -1,7 +1,24 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+} from "@mui/material";
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const socket = io("http://localhost:8080");
+const DISCOUNT_RATE = 0.1;
 
 function App() {
   const [startupList, setStartupList] = useState([]);
@@ -18,22 +35,18 @@ function App() {
   });
 
   const [message, setMessage] = useState("");
+  const [analysisForm, setAnalysisForm] = useState({
+    projectCost: "",
+    expectedReturn: "",
+    duration: "",
+  });
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [chartData, setChartData] = useState([]);
 
-  // Fetch startup data from the server
   useEffect(() => {
-    socket.emit("get_startups"); // Emit "get_startups" event when the component mounts
-
-    // Listen for the response and update the list
-    socket.on("startups_data", (data) => {
-      setStartupList(data.startups);
-    });
-
-    // Listen for new startups added and append to the list
-    socket.on("new_startup", (data) => {
-      setStartupList((prevList) => [...prevList, data.startup]);
-    });
-
-    // Cleanup event listeners on unmount
+    socket.emit("get_startups");
+    socket.on("startups_data", (data) => setStartupList(data.startups));
+    socket.on("new_startup", (data) => setStartupList((prevList) => [...prevList, data.startup]));
     return () => {
       socket.off("startups_data");
       socket.off("new_startup");
@@ -41,7 +54,13 @@ function App() {
   }, []);
 
   const handleSelectStartup = (startupId) => {
-    setStartupData(startupList.find((startup) => startup._id === startupId));
+    const selected = startupList.find((s) => s._id === startupId);
+    setStartupData(selected);
+    setAnalysisForm({
+      projectCost: selected.amountRaised || "",
+      expectedReturn: parseFloat(selected.amountRaised || 0) * 1.5 + "",
+      duration: selected.fundingDuration || "",
+    });
   };
 
   const handleSubmit = (e) => {
@@ -61,147 +80,152 @@ function App() {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAnalysisChange = (e) => {
+    setAnalysisForm({ ...analysisForm, [e.target.name]: e.target.value });
+  };
+
+  const analyzeInvestment = () => {
+    const cost = parseFloat(analysisForm.projectCost);
+    const expected = parseFloat(analysisForm.expectedReturn);
+    const duration = parseInt(analysisForm.duration);
+
+    if (isNaN(cost) || isNaN(expected) || isNaN(duration) || duration <= 0) {
+      alert("Please enter valid numerical values.");
+      return;
+    }
+
+    const roi = ((expected - cost) / cost) * 100;
+    const risk = roi > 50 ? "Low" : roi > 20 ? "Moderate" : roi > 0 ? "High" : "Very High";
+    const annualReturn = expected / duration;
+    let npv = -cost;
+    for (let t = 1; t <= duration; t++) {
+      npv += annualReturn / Math.pow(1 + DISCOUNT_RATE, t);
+    }
+
+    let cumulative = 0;
+    let paybackPeriod = null;
+    for (let t = 1; t <= duration; t++) {
+      cumulative += annualReturn;
+      if (cumulative >= cost && paybackPeriod === null) paybackPeriod = t;
+    }
+
+    const data = [];
+    let cumulativeCashFlow = -cost;
+    for (let year = 1; year <= duration; year++) {
+      cumulativeCashFlow += annualReturn;
+      data.push({
+        year: `Year ${year}`,
+        value: parseFloat(cumulativeCashFlow.toFixed(2)),
+      });
+    }
+
+    setAnalysisResult({
+      roi: roi.toFixed(2),
+      risk,
+      npv: npv.toFixed(2),
+      paybackPeriod,
     });
+    setChartData(data);
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
-      {/* Form Section */}
-      <div style={{ flex: 1, marginRight: "20px" }}>
-        <h1 style={{ color: "brown", textTransform: "" }}>Agrinetwork Startups</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="photo"
-            placeholder="Photo URL"
-            value={formData.photo}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="website"
-            placeholder="Website"
-            value={formData.website}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleChange}
-            style={{ width: "100%", height: "150px", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="industries"
-            placeholder="Industries"
-            value={formData.industries}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="locations"
-            placeholder="Locations"
-            value={formData.locations}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="amountRaised"
-            placeholder="Amount Raised"
-            value={formData.amountRaised}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <input
-            type="text"
-            name="fundingDuration"
-            placeholder="Funding Duration"
-            value={formData.fundingDuration}
-            onChange={handleChange}
-            style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Add Startup
-          </button>
-        </form>
-        {message && <p>{message}</p>}
+    <div style={{ padding: "20px" }}>
+      <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ flex: 1 }}>
+          <h1 style={{ color: "brown" }}>Agrinetwork Startups</h1>
+          <form onSubmit={handleSubmit}>
+            {Object.keys(formData).map((key) => (
+              <input
+                key={key}
+                type="text"
+                name={key}
+                placeholder={key.replace(/([A-Z])/g, " $1")}
+                value={formData[key]}
+                onChange={handleChange}
+                style={{ width: "100%", marginBottom: "10px", padding: "10px", fontSize: "16px" }}
+              />
+            ))}
+            <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white" }}>
+              Add Startup
+            </button>
+          </form>
+          {message && <p>{message}</p>}
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <h3 style={{ color: "brown" }}>Startups</h3>
+          {startupList.map((startup) => (
+            <div
+              key={startup._id}
+              onClick={() => handleSelectStartup(startup._id)}
+              style={{ border: "1px solid #ddd", marginBottom: "10px", padding: "10px", cursor: "pointer" }}
+            >
+              <h4 style={{ backgroundColor: "chocolate", padding: "10px", borderRadius: "5px", textAlign: "center" }}>
+                {startup.name}
+              </h4>
+              <p style={{ fontSize: "18px", color: "gray" }}>{startup.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {startupData && (
+          <div style={{ flex: 1 }}>
+            <h4 style={{ color: "green" }}>Details for {startupData.name}</h4>
+            <p>{startupData.description}</p>
+            <p><strong>Website:</strong> <a href={startupData.website}>{startupData.website}</a></p>
+          </div>
+        )}
       </div>
 
-      <div style={{ flex: 1 }}>
-  <h3 style={{ color: 'brown', fontSize: '24px' }}>Startups</h3>
-  {startupList.map((startup) => (
-    <div
-      key={startup._id}
-      onClick={() => handleSelectStartup(startup._id)}
-      style={{
-        padding: "10px",
-        border: "1px solid #ddd",
-        marginBottom: "10px",
-        cursor: "pointer",
-      }}
-    >
-      <h4
-        style={{
-          backgroundColor: 'chocolate', // Chocolate color
-          color: 'black',
-          padding: '10px',
-          borderRadius: '5px',
-          fontSize: '15px',
-          textAlign: 'center',
-          cursor: 'pointer',
-          textTransform: 'uppercase', // Make text uppercase
-          transition: 'background-color 0.3s ease',
-        }}
-        onMouseEnter={(e) => (e.target.style.backgroundColor = '#D2691E')} // Darker chocolate on hover
-        onMouseLeave={(e) => (e.target.style.backgroundColor = 'chocolate')} // Reset chocolate on mouse leave
-      >
-        {startup.name}
-      </h4>
-      <p style={{ fontSize: '18px', color: 'gray' }}>{startup.description}</p> {/* Increased font size for description */}
-    </div>
-  ))}
-</div>
+      <Card sx={{ mt: 4, p: 3 }}>
+        <Typography variant="h5" gutterBottom>
+          Investment Analysis
+        </Typography>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
+          <TextField
+            label="Project Cost (KES)"
+            name="projectCost"
+            value={analysisForm.projectCost}
+            onChange={handleAnalysisChange}
+          />
+          <TextField
+            label="Expected Return (KES)"
+            name="expectedReturn"
+            value={analysisForm.expectedReturn}
+            onChange={handleAnalysisChange}
+          />
+          <TextField
+            label="Duration (Years)"
+            name="duration"
+            value={analysisForm.duration}
+            onChange={handleAnalysisChange}
+          />
+          <Button onClick={analyzeInvestment} variant="contained" color="primary">
+            Analyze
+          </Button>
+        </Box>
 
-
-
-      {/* Selected Startup Details */}
-{startupData && (
-  <div style={{ flex: 1, marginLeft: "20px" }}>
-    <h4 style={{ color: "green", fontSize: "20px" }}>Details for {startupData.name}</h4>
-    <p>{startupData.description}</p>
-    <p>
-      <strong>Website:</strong> <a href={startupData.website} style={{ color: "green" }}>{startupData.website}</a>
-    </p>
-  </div>
-)}
-
-    
+        {analysisResult && (
+          <Box>
+            <Typography>ROI: {analysisResult.roi}%</Typography>
+            <Typography>Risk Level: {analysisResult.risk}</Typography>
+            <Typography>NPV: KES {analysisResult.npv}</Typography>
+            <Typography>Payback Period: {analysisResult.paybackPeriod} year(s)</Typography>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData}>
+                <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="year" />
+                <YAxis />
+                <Tooltip />
+              </LineChart>
+            </ResponsiveContainer>
+          </Box>
+        )}
+      </Card>
     </div>
   );
 }

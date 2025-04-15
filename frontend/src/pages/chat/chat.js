@@ -37,9 +37,9 @@ function Chat() {
                     <List>
                         <ListItem button>
                             <ListItemIcon>
-                                <Avatar sx={{ bgcolor: deepOrange[500] }} variant="rounded">NG</Avatar>
+                                <Avatar sx={{ bgcolor: deepOrange[500] }} variant="rounded">AD</Avatar>
                             </ListItemIcon>
-                            <ListItemText>Neelansh Gulati</ListItemText>
+                            <ListItemText>admin</ListItemText>
                         </ListItem>
                     </List>
                     <Divider />
@@ -50,22 +50,22 @@ function Chat() {
                     <List>
                         <ListItem button>
                             <ListItemIcon>
-                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">PS</Avatar>
+                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">JK</Avatar>
                             </ListItemIcon>
-                            <ListItemText>Parampal Singh</ListItemText>
+                            <ListItemText>JK</ListItemText>
                             <ListItemText secondary="online" align="right"></ListItemText>
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">JP</Avatar>
+                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">TJ</Avatar>
                             </ListItemIcon>
-                            <ListItemText>Jenish Patel</ListItemText>
+                            <ListItemText>TJ</ListItemText>
                         </ListItem>
                         <ListItem button>
                             <ListItemIcon>
-                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">FP</Avatar>
+                                <Avatar sx={{ bgcolor: "#1976d2" }} variant="rounded">JK</Avatar>
                             </ListItemIcon>
-                            <ListItemText>Fenil Parmar</ListItemText>
+                            <ListItemText>JK</ListItemText>
                         </ListItem>
                     </List>
                 </Grid>

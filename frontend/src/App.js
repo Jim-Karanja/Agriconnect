@@ -20,6 +20,7 @@ import Investorprofile from "./pages/investors/Investorprofile";
 import DocumentVerification from "./pages/documentVerification/DocumentVerification";
 import Footer from "./pages/footer/Footer";
 import StartupProfile from "./pages/product/StartupProfile";
+import Analysis from "./pages/Analysis";
 
 function App() {
   const [isUserAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -55,6 +56,7 @@ function App() {
           <Route exact path="/dashboard" element={<Dashboard />} />
           <Route exact path="/Home" element={<Home />} /> {/* Correct route to render Home */}
           <Route exact path="/Header" element={<Home />} /> {/* Correct route to render Home */}
+          <Route exact path="/Analysis" element={<Analysis />} />
           
           <Route exact path="/" element={<Dashboard />} />
         </Routes>

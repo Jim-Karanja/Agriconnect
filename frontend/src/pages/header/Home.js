@@ -113,6 +113,20 @@ function Home() {
                         fontSize: "18px",
                         p: 1.5,
                       }}
+                      onClick={() => navigate("/Analysis")}
+                    >
+                      Analysis
+                    </Typography>
+                    <Typography
+                      variant="body"
+                      component="div"
+                      sx={{
+                        display: { xs: "none", sm: "block", alignContent: "center" },
+                        cursor: "pointer",
+                        color: "white",
+                        fontSize: "18px",
+                        p: 1.5,
+                      }}
                       onClick={() => navigate("/profile")}
                     >
                       User Management

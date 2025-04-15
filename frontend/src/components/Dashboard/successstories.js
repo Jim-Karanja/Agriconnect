@@ -7,30 +7,30 @@ export default function Success() {
   const responses = [
     {
       id: 1,
-      name: 'Shelly Norwa',
+      name: 'John',
       review:
-        'As an investor I had worked with several companies. InnvestInn has a good foothold and is very knowledgeable about the impact investment field. We were able to successfully invest in the projects developed regarding Food scarcity.',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
       imgPath:
-        'https://sweta-myteam-website-fm.netlify.app/static/media/avatar-kady.78fc482c.jpg',
-        designation: 'Senior Executive at Rally Assets'
+        'https://imgur.com/gDjslG9',
+        designation: ' Rally Assets'
     },
     {
       id: 2,
-      name: 'Smitty Jones',
+      name: 'Jane',
       review:
-        'As newbies we had absolutely no idea with which investor I should move on for the project we devoloped.InvestInn helped us in gaining a benificial Investor by understanding all the financial and legal details.',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
         imgPath:
-        'https://sweta-myteam-website-fm.netlify.app/static/media/avatar-aiysha.e119a0c1.jpg',
+        'https://imgur.com/gDjslG9',
         designation: 'DMZ Incubator',
     },
     {
       id: 3,
-      name: 'Ryan Duffy',
+      name: 'Robert',
       review:
-        'Several platforms might provide us with the projects in the specialized fields but InvestInn has gone beyond and has integrated the technology with the projects, which made our tasks much easier and worry free.',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
         imgPath:
-        'https://sweta-myteam-website-fm.netlify.app/static/media/avatar-arthur.098c2e26.jpg',
-        designation: 'Co-Founder at MaRS',
+        'https://imgur.com/gDjslG9',
+        designation: ' MaRS',
     },
   ];
 
