@@ -2,10 +2,11 @@ import * as React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import theme from "./theme"; // Import your custom theme
 import "./App.css";
-
-import Home from "./pages/header/Home";
 import Payment from "./pages/payment/Payment";
 import InvSearchBar from "./pages/investorSearch/InvSearchBar";
 import StartupSearchBar from "./pages/startupSearch/StartupSearchBar";
@@ -21,6 +22,7 @@ import DocumentVerification from "./pages/documentVerification/DocumentVerificat
 import Footer from "./pages/footer/Footer";
 import StartupProfile from "./pages/product/StartupProfile";
 import Analysis from "./pages/Analysis";
+import Landing from "./pages/Landing";
 
 function App() {
   const [isUserAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -35,7 +37,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Home /> {/* Rendering the Home component here */}
+        {/* ✅ Green Header */}
+        <AppBar position="static" sx={{ backgroundColor: "primary" }}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              ConnectNow
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        {/* ✅ Routes */}
         <Routes>
           {isUserAuthenticated && (
             <>
@@ -54,12 +65,11 @@ function App() {
           <Route exact path="/signup" element={<SignUp />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/Home" element={<Home />} /> {/* Correct route to render Home */}
-          <Route exact path="/Header" element={<Home />} /> {/* Correct route to render Home */}
           <Route exact path="/Analysis" element={<Analysis />} />
-          
+          <Route exact path="/Landing" element={<Landing />} />
           <Route exact path="/" element={<Dashboard />} />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </ThemeProvider>

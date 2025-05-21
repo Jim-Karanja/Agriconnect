@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography, Button, Box } from '@mui/material';
-import image from '../../assets/images/about.jpg';
+import image from '../../assets/images/handshake.png';
 import { useNavigate } from 'react-router-dom';
 
 export default function About(){

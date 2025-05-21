@@ -32,6 +32,7 @@ function Login({ setIsAuthenticated }) {
       );
 
       if (response.status === 200) {
+        // Save user data in localStorage
         localStorage.setItem("user", user.get("email"));
 
         const userDetails = await axios.get(
@@ -45,6 +46,7 @@ function Login({ setIsAuthenticated }) {
         localStorage.setItem("addr", userDetails.data[0].address);
         localStorage.setItem("gender", userDetails.data[0].gender);
 
+        // Mark user as authenticated and store it persistently
         setIsAuthenticated(true);
         localStorage.setItem("isAuth", "true");
 
@@ -54,7 +56,7 @@ function Login({ setIsAuthenticated }) {
           text: `Hey! ${userData.email}`,
         });
 
-        navigate("/Home");
+        navigate("/Landing");
       }
     } catch (error) {
       Swal.fire({
