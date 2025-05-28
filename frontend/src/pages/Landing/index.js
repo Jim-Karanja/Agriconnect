@@ -115,7 +115,7 @@ function Home() {
             >
               <MenuItem onClick={() => handleNavigate("/investors")}>Investors</MenuItem>
               <MenuItem onClick={() => handleNavigate("/startups")}>Startups</MenuItem>
-              <MenuItem onClick={() => handleNavigate("/Analysis")}>Analysis</MenuItem>
+              <MenuItem onClick={() => handleNavigate("/Aibot")}>Aibot</MenuItem>
               <MenuItem onClick={() => handleNavigate("/profile")}>User Management</MenuItem>
             </Menu>
           </Box>

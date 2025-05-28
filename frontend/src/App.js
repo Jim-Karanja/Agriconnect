@@ -21,7 +21,7 @@ import Investorprofile from "./pages/investors/Investorprofile";
 import DocumentVerification from "./pages/documentVerification/DocumentVerification";
 import Footer from "./pages/footer/Footer";
 import StartupProfile from "./pages/product/StartupProfile";
-import Analysis from "./pages/Analysis";
+import Aibot from "./pages/Aibot";
 import Landing from "./pages/Landing";
 
 function App() {
@@ -65,7 +65,7 @@ function App() {
           <Route exact path="/signup" element={<SignUp />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/Analysis" element={<Analysis />} />
+          <Route exact path="/Aibot" element={<Aibot />} />
           <Route exact path="/Landing" element={<Landing />} />
           <Route exact path="/" element={<Dashboard />} />
         </Routes>
