@@ -21,18 +21,42 @@ function Posts(props) {
                   maxHeight: "auto",
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height={"200"}
-                  image={post.photo}
-                  alt="Startup's Logo"
-                  sx={{ border: 1, borderColor: "primary.main" }}
-                  onClick={() => {
-                    navigate("/startup", {
-                      state: { id: post._id },
-                    });
-                  }}
-                />
+                {post.photo && post.photo.trim() ? (
+                  <CardMedia
+                    component="img"
+                    height={"200"}
+                    image={post.photo.startsWith('http') ? post.photo : `http://localhost:8080/${post.photo}`}
+                    alt="Startup's Logo"
+                    sx={{ border: 1, borderColor: "primary.main" }}
+                    onClick={() => {
+                      navigate("/startup", {
+                        state: { id: post._id },
+                      });
+                    }}
+                  />
+                ) : (
+                  <Box
+                    sx={{
+                      height: 200,
+                      backgroundColor: '#f5f5f5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: 1,
+                      borderColor: 'primary.main',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      navigate("/startup", {
+                        state: { id: post._id },
+                      });
+                    }}
+                  >
+                    <Typography variant="h6" color="text.secondary">
+                      {post.name.charAt(0).toUpperCase()}
+                    </Typography>
+                  </Box>
+                )}
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <b>{post.name}</b>

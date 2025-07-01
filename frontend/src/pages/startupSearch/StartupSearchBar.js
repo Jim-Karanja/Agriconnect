@@ -10,7 +10,7 @@ function StartupSearchBar() {
   const [posts, setPosts] = React.useState([]);
   const [tempProfiles, setTempProfiles] = React.useState([]);
 
-  const url = "http://localhost:8080/startups/fetchAll";
+  const url = "http://localhost:8080/startups";
 
   useEffect(() => {
     fetchAllData();
@@ -20,12 +20,16 @@ function StartupSearchBar() {
     axios
       .get(`${url}`)
       .then((response) => {
-        const allData = response.data.startup;
-        console.log(allData);
+        const allData = response.data.startups || []; // Fixed: use 'startups' and provide fallback
+        console.log("Fetched startups:", allData);
         setPosts(allData);
         setTempProfiles(allData);
       })
-      .catch((error) => console.error(`Error: ${error}`));
+      .catch((error) => {
+        console.error(`Error fetching startups: ${error}`);
+        setPosts([]);
+        setTempProfiles([]);
+      });
   };
 
   const onSumbit = () => {

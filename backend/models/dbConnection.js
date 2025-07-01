@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const db_link = 'mongodb+srv://thanjukaranja78:Smejak12%40%40%23%23@cluster0.wpcy5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const db_link = 'mongodb+srv://thanjukaranja78:Smejak12%40%40%23%23@cluster0.wpcy5.mongodb.net/agriconnect?retryWrites=true&w=majority&appName=Cluster0';
 
 
 // code reference: https://daily.dev/blog/the-4-creational-design-patterns-in-node-js-you-should-know 
