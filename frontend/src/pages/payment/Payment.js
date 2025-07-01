@@ -20,6 +20,7 @@ import {
   CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import axios from "axios";
+import { API_URLS } from "../../config/api";
 
 function MpesaPayment() {
   const [paymentData, setPaymentData] = useState({
@@ -106,7 +107,7 @@ function MpesaPayment() {
       const formattedPhone = formatPhoneNumber(paymentData.phoneNumber);
       
       // Call M-Pesa backend API
-      const response = await axios.post("http://localhost:8080/payment/mpesa", {
+      const response = await axios.post(API_URLS.MPESA_PAYMENT, {
         phoneNumber: formattedPhone,
         amount: amount,
         description: paymentData.description,
